@@ -6,11 +6,13 @@ export interface IUserModel extends Document {
     password: string;
     username: string;
     role: "client" | "barber" | "admin";
-    phoneNumber?: string;
-    bio?: string;
-    photoUrl?: string;
-    specialties?: string[];
-    experience?: number;
+    phoneNumber?: string | undefined;
+    bio?: string | undefined;
+    photoUrl?: string | undefined;
+    specialties?: string[] | undefined;
+    experience?: number | undefined;
+    resetPasswordToken?: string | undefined;
+    resetPasswordExpires?: Date | undefined;
 }
 
 const UserSchema = new Schema<IUserModel>({
@@ -42,7 +44,11 @@ const UserSchema = new Schema<IUserModel>({
 
     specialties: { type: [String], default: [] },
 
-    experience: { type: Number, default: 0 }
+    experience: { type: Number, default: 0 },
+
+    resetPasswordToken: { type: String },
+
+    resetPasswordExpires: { type: Date },
 
 }, { timestamps: true });
 

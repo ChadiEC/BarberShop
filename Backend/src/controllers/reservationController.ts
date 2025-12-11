@@ -6,7 +6,10 @@ import {
   getBarberWeek,
   cancelReservation,
   completeReservation,
-  getOccupiedTimeSlots
+  getOccupiedTimeSlots,
+  getBarberToday,
+  getBarberStats,
+  getBarberUpcoming,
 } from "../services/reservationService";
 import { AuthRequest } from "../types/types";
 import Reservation from "../models/Reservation";
@@ -17,6 +20,12 @@ export async function createReservationController(
 ) {
   try {
     const clientUsername = req.user!.username;
+
+    if (req.user!.role === "barber") {
+      return res
+        .status(403)
+        .json({ message: "Barbers cannot book appointments." });
+    }
     const { service, barber, date, time } = req.body;
 
     // Validation date future
@@ -87,13 +96,34 @@ export async function getBarberWeekController(req: Request, res: Response) {
   res.json(list);
 }
 
+export async function getBarberTodayController(req: Request, res: Response) {
+  const { username } = req.params;
+  const list = await getBarberToday(username!);
+  res.json(list);
+}
+
+export async function getBarberUpcomingController(req: Request, res: Response) {
+  const { username } = req.params;
+  const list = await getBarberUpcoming(username!);
+  res.json(list);
+}
+
+export async function getBarberStatsController(req: Request, res: Response) {
+  const { username } = req.params;
+  const stats = await getBarberStats(username!);
+  res.json(stats);
+}
+
 export async function cancelReservationController(req: Request, res: Response) {
   const { id } = req.params;
   const result = await cancelReservation(id!);
   res.json(result);
 }
 
-export async function getOccupiedTimeSlotsController(req: Request, res: Response) {
+export async function getOccupiedTimeSlotsController(
+  req: Request,
+  res: Response
+) {
   const { barber, date } = req.query;
 
   if (!barber || !date) {

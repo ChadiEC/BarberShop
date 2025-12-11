@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../api/axiosInstance";
 import "../css/Barbers.css";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface Barber {
   username: string;
@@ -9,6 +10,7 @@ interface Barber {
   bio?: string;
   experience?: number;
   photoUrl?: string;
+  specialties?: [string];
 }
 
 export default function Barbers() {
@@ -21,6 +23,7 @@ export default function Barbers() {
   const [password, setPassword] = useState("");
   const [bio, setBio] = useState("");
   const [experience, setExperience] = useState<number | "">("");
+  const [specialties, setSpecialties] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
 
   // Get user
@@ -45,9 +48,13 @@ export default function Barbers() {
   // -----------------------------
   async function handleCreateBarber() {
     if (!username || !fullname || !bio || !experience || !photoUrl) {
-      alert("Please fill all required fields.");
+      toast.error("Please fill all required fields.");
       return;
     }
+    const specialtiesArray = specialties
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s.length > 0); // enlève les vides
 
     try {
       const res = await api.post("/barbers", {
@@ -58,6 +65,7 @@ export default function Barbers() {
         bio,
         experience,
         photoUrl,
+        specialties: specialtiesArray,
       });
 
       // update instantly
@@ -76,82 +84,83 @@ export default function Barbers() {
       setPhotoUrl("");
     } catch (err) {
       console.error(err);
-      alert("Failed to create barber");
+      toast.error("Failed to create barber");
     }
   }
 
- async function handleUpdateBarber() {
-  if (!username) {
-    alert("Enter the username of the barber you want to update.");
-    return;
+  async function handleUpdateBarber() {
+    if (!username) {
+      toast.error("Enter the username of the barber you want to update.");
+      return;
+    }
+
+    const updateData: any = {};
+
+    if (specialties.trim() !== "") {
+      updateData.specialties = specialties
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s.length > 0);
+    }
+
+    if (fullname !== "") updateData.fullname = fullname;
+    if (bio !== "") updateData.bio = bio;
+    if (experience !== "") updateData.experience = experience;
+    if (photoUrl !== "") updateData.photoUrl = photoUrl;
+
+    if (Object.keys(updateData).length === 0) {
+      toast.error("Nothing to update.");
+      return;
+    }
+
+    try {
+      const res = await api.patch(`/barbers/${username}`, updateData);
+
+      setBarbers(barbers.map((b) => (b.username === username ? res.data : b)));
+
+      setShowModal(false);
+
+      // reset fields
+      setUsername("");
+      setFullname("");
+      setBio("");
+      setExperience("");
+      setPhotoUrl("");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update barber");
+    }
   }
 
-  const updateData: any = {};
+  async function handleDeleteBarber() {
+    if (!username) {
+      toast.error("Enter the barber username to delete.");
+      return;
+    }
 
-  if (fullname !== "") updateData.fullname = fullname;
-  if (bio !== "") updateData.bio = bio;
-  if (experience !== "") updateData.experience = experience;
-  if (photoUrl !== "") updateData.photoUrl = photoUrl;
+    if (!confirm(`Delete barber '${username}'? This cannot be undone.`)) {
+      return;
+    }
 
-  if (Object.keys(updateData).length === 0) {
-    alert("Nothing to update.");
-    return;
+    try {
+      await api.delete(`/barbers/${username}`);
+
+      // Remove barber from frontend list
+      setBarbers(barbers.filter((b) => b.username !== username));
+
+      setShowModal(false);
+      setUsername("");
+      setFullname("");
+      setBio("");
+      setExperience("");
+      setPhotoUrl("");
+
+      toast.success("Barber deleted successfully.");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete barber");
+    }
   }
-
-  try {
-    const res = await api.patch(`/barbers/${username}`, updateData);
-
-    setBarbers(
-      barbers.map((b) =>
-        b.username === username ? res.data : b
-      )
-    );
-
-    setShowModal(false);
-
-    // reset fields
-    setUsername("");
-    setFullname("");
-    setBio("");
-    setExperience("");
-    setPhotoUrl("");
-  } catch (err) {
-    console.error(err);
-    alert("Failed to update barber");
-  }
-}
-
-async function handleDeleteBarber() {
-  if (!username) {
-    alert("Enter the barber username to delete.");
-    return;
-  }
-
-  if (!confirm(`Delete barber '${username}'? This cannot be undone.`)) {
-    return;
-  }
-
-  try {
-    await api.delete(`/barbers/${username}`);
-
-    // Remove barber from frontend list
-    setBarbers(barbers.filter(b => b.username !== username));
-
-    setShowModal(false);
-    setUsername("");
-    setFullname("");
-    setBio("");
-    setExperience("");
-    setPhotoUrl("");
-
-    alert("Barber deleted successfully.");
-  } catch (err) {
-    console.error(err);
-    alert("Failed to delete barber");
-  }
-}
-
-
 
   return (
     <div className="barbers-container">
@@ -168,7 +177,17 @@ async function handleDeleteBarber() {
 
             <h2>{b.fullname}</h2>
             <p className="bio">{b.bio || "No description available."}</p>
-
+            <div className="specialties">
+              {b.specialties && b.specialties.length > 0 ? (
+                b.specialties.map((s, i) => (
+                  <span key={i} className="spec-tag">
+                    {s}
+                  </span>
+                ))
+              ) : (
+                <span className="no-spec">No specialties listed.</span>
+              )}
+            </div>
             <p className="exp">✂ {b.experience || 0} years of experience</p>
 
             <Link to={`/barbers/${b.username}`} className="profile-btn">
@@ -219,6 +238,11 @@ async function handleDeleteBarber() {
               value={experience}
               onChange={(e) => setExperience(Number(e.target.value))}
             />
+            <input
+              placeholder="Specialties (comma separated)"
+              value={specialties}
+              onChange={(e) => setSpecialties(e.target.value)}
+            />
 
             <input
               placeholder="Photo URL"
@@ -229,7 +253,9 @@ async function handleDeleteBarber() {
             <div className="modal-buttons">
               <button onClick={handleCreateBarber}>Create</button>
               <button onClick={handleUpdateBarber}>Update</button>
-              <button onClick={handleDeleteBarber} className="delete-btn">Delete</button>
+              <button onClick={handleDeleteBarber} className="delete-btn">
+                Delete
+              </button>
               <button
                 className="cancel-btn"
                 onClick={() => setShowModal(false)}

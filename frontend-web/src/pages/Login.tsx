@@ -1,8 +1,8 @@
 import { useState } from "react";
 import api from "../api/axiosInstance";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../css/Login.css";
-
+import toast from "react-hot-toast";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -23,13 +23,13 @@ export default function Login() {
       // redirect vers home
       navigate("/");
     } catch (err) {
-      console.error(err);
+      toast.error("Wrong credentials");
       // futur: afficher un message UI propre
     }
   }
 
   return (
-    <div className="login">
+    <div className="login-container">
       <h1>Login</h1>
 
       <form className="login-form" onSubmit={handleLogin}>
@@ -47,7 +47,23 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button type="submit">Login</button>
+        <div className="button-row">
+          <button type="submit" className="login-btn">
+            Login
+          </button>
+
+          <button
+            type="button"
+            className="register-btn"
+            onClick={() => navigate("/register")}
+          >
+            Register
+          </button>
+        </div>
+
+        <Link to="/forgot-password" className="forgot-link">
+          Forgot password?
+        </Link>
       </form>
     </div>
   );

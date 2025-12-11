@@ -8,7 +8,9 @@ import Barbers from "../pages/Barbers";
 import Booking from "../pages/Booking";
 import MyReservations from "../pages/Reservation";
 import BarberProfile from "../pages/BarberProfile";
-
+import BarberDashboard from "../pages/BarberDashboard";
+import ForgotPassword from "../pages/ForgotPassword";
+import ResetPassword from "../pages/ResetPassword";
 
 export default function AppRouter() {
   return (
@@ -76,8 +78,18 @@ export default function AppRouter() {
         }
       />
 
-      <Route path="/barbers/:username" element={<BarberProfile />} />
+      <Route
+        path="/dashboard/barber/:username"
+        element={
+          <Layout>
+            <BarberDashboard />
+          </Layout>
+        }
+      />
 
+      <Route path="/barbers/:username" element={<BarberProfile />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>
   );
 }

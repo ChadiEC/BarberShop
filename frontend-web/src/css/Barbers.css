@@ -133,3 +133,26 @@
 .cancel-btn {
   background: #aaa;
 }
+
+.specialties {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.spec-tag {
+  padding: 6px 12px;
+  background: #d4a017;
+  color: #000;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.no-spec {
+  color: #aaa;
+  font-size: 14px;
+  font-style: italic;
+}

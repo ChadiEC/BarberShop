@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {getAllBarbers,getBarberByUsername,updateBarberProfile,createBarber,deleteBarber} from "../services/barberService";
-import User from "../models/User";
+import  User  from "../models/User";
+import bcrypt from "bcryptjs";
 import { AuthRequest } from "../types/types";
 
 // GET /api/barbers
@@ -24,12 +25,13 @@ export async function getBarberController(req: Request, res: Response) {
 
 //@ts-ignore
 export async function createBarberController(req, res) {
+  const hashedPassword = await bcrypt.hash(req.body.password, 10);
   try {
     const barber = await User.create({
       username: req.body.username,
       fullname: req.body.fullname,
       email: req.body.email,
-      password: req.body.password, // sera hashé par ton UserSchema
+      password: hashedPassword, // sera hashé par ton UserSchema
       bio: req.body.bio,
       experience: req.body.experience,
       photoUrl: req.body.photoUrl,
@@ -55,7 +57,8 @@ export async function updateBarberController(req, res) {
     if (req.body.bio) updateData.bio = req.body.bio;
     if (req.body.experience !== undefined) updateData.experience = req.body.experience;
     if (req.body.photoUrl) updateData.photoUrl = req.body.photoUrl;
-
+    if (req.body.specialties) updateData.specialties = req.body.specialties;
+    
     const updated = await User.findOneAndUpdate(
       { username, role: "barber" },
       updateData,

@@ -1,4 +1,17 @@
+.login-container{
+   width: 50%;
+  margin: 40px auto;
+  padding: 20px;
+  color: white;
+  background-color: #444;
+}
+
+.login-container h1{
+  text-align: center;
+}
+
 .login-form {
+  
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -14,7 +27,16 @@
   box-sizing: border-box;
 }
 
-.login-form button {
+/* Wrap the buttons on one line */
+.button-row {
+  display: flex;
+  justify-content: space-between; /* left + right */
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Login button */
+.login-btn {
   padding: 12px;
   background: #d4af37;
   color: black;
@@ -22,5 +44,27 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  width: 100%;
+  width: 48%; /* or auto */
 }
+
+/* Register button */
+.register-btn {
+  padding: 12px;
+  background: black;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 48%;
+}
+
+/* Optional hover effects */
+.login-btn:hover {
+  background: #c19d2f;
+}
+
+.register-btn:hover {
+  background: #555;
+}
+

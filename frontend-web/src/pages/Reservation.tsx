@@ -38,7 +38,7 @@ export default function MyReservations() {
 
   async function cancelReservation(id: string) {
     try {
-      await api.patch(`/reservations/${id}/cancel`);
+      await api.delete(`/reservations/${id}/cancel`);
       alert("Reservation canceled!");
 
       // reload upcoming list

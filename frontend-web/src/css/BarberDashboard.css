@@ -1,0 +1,16 @@
+.stat-card {
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 120px;
+  border: 2px solid #444;
+}
+
+.dashboard-card {
+  background: #1f1f1f;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}

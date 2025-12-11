@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import api from "../api/axiosInstance";
 import "../css/Service.css";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 
 interface Service {
   name: string;
@@ -42,15 +44,22 @@ export default function Services() {
   }, []);
 
   function handleBook(name: string) {
+    const token = localStorage.getItem("token");
+    if(!token){
+      toast.error("Log in or register to book now!")
+      navigate("/login");
+      return
+    }
     navigate("/booking", { state: { preselectedService: name } });
   }
+
 
   // -----------------------------
   // CREATE NEW SERVICE (STAFF ONLY)
   // -----------------------------
   async function handleCreateService() {
     if (!name || !price || !duration) {
-      alert("Please fill all required fields.");
+      toast.error("Please fill all required fields.");
       return;
     }
 
@@ -78,13 +87,13 @@ export default function Services() {
 
     } catch (err) {
       console.error(err);
-      alert("Failed to create service");
+      toast.error("Failed to create service");
     }
   }
 
 async function handleDeleteService() {
   if (!name) {
-    alert("Enter the service username to delete.");
+    toast.error("Enter the service username to delete.");
     return;
   }
 
@@ -105,16 +114,16 @@ async function handleDeleteService() {
     setDuration("");
     setPhotoUrl("");
 
-    alert("Service deleted successfully.");
+    toast.success("Service deleted successfully.");
   } catch (err) {
     console.error(err);
-    alert("Failed to delete service");
+    toast.error("Failed to delete service");
   }
 }
 
 async function handleUpdateService() {
   if (!name) {
-    alert("Enter the service name you want to update.");
+    toast.error("Enter the service name you want to update.");
     return;
   }
 
@@ -126,7 +135,7 @@ async function handleUpdateService() {
   if (photoUrl !== "") updateData.photoUrl = photoUrl;
 
   if (Object.keys(updateData).length === 0) {
-    alert("No fields to update.");
+    toast.error("No fields to update.");
     return;
   }
 
@@ -148,7 +157,7 @@ async function handleUpdateService() {
 
   } catch (err) {
     console.error(err);
-    alert("Failed to update service");
+    toast.error("Failed to update service");
   }
 }
 

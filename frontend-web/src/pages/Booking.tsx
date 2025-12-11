@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/axiosInstance";
 import "../css/Booking.css";
 import { useLocation } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface Barber {
   username: string;
@@ -97,6 +98,13 @@ export default function Booking() {
     "17:00",
     "17:30",
   ];
+  useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    toast.error("Please login to book an appointment.");
+    navigate("/login");
+  }
+}, []);
 
   // ---------------------------
   // HANDLE BOOKING SUBMIT
@@ -105,9 +113,10 @@ export default function Booking() {
     e.preventDefault();
 
     if (!selectedService || !selectedBarber || !date || !time) {
-      alert("Please fill all fields");
+      toast.error("Please fill all fields");
       return;
     }
+    
 
     // Date format expected: YYYY-MM-DDTHH:mm
     const DateYMD = `${date}`;
@@ -120,11 +129,11 @@ export default function Booking() {
         time: Time,
       });
 
-      alert("Reservation successful!");
+      toast.success("Reservation successful!");
       navigate("/my-reservations");
     } catch (err) {
       console.error(err);
-      alert("Failed to book appointment");
+      toast.error("Failed to book appointment");
     }
   }
 
@@ -188,6 +197,7 @@ export default function Booking() {
 
               return (
                 <button
+                  type="button" // ← TRÈS IMPORTANT
                   key={slot}
                   disabled={isOccupied}
                   className={

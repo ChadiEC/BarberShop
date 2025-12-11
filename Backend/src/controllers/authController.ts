@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { registerUser, loginUser } from "../services/authService";
+import { registerUser, loginUser, changePasswordService,requestPasswordReset,resetPassword } from "../services/authService";
 import User from "../models/User";
-
+import {sendPasswordResetEmail} from "../utils/sendPasswordResetEmail"
 export async function register(req: Request, res: Response) {
   try {
     const { fullname, email, password,username,phoneNumber } = req.body;
@@ -57,3 +57,49 @@ export const me = async (req: Request & { user?: any }, res: Response) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
+export async function changePasswordController(req: Request & { user?: any }, res: Response) {
+  try {
+    const { currentPassword, newPassword } = req.body;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: "Missing fields" });
+    }
+
+    await changePasswordService(req.user.id, currentPassword, newPassword);
+
+    res.json({ message: "Password updated successfully" });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
+  }
+}
+
+export async function requestPasswordResetController(req: Request, res: Response) {
+  try {
+    const { email } = req.body;
+
+    const token = await requestPasswordReset(email);
+
+    // send email here
+    await sendPasswordResetEmail(email, token);
+
+    res.json({ message: "Password reset email sent" });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
+  }
+}
+
+export async function resetPasswordController(req: Request, res: Response) {
+  try {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+
+    await resetPassword(token!, newPassword);
+
+    res.json({ message: "Password updated successfully" });
+  } catch (err: any) {
+    res.status(400).json({ message: err.message });
+  }
+}

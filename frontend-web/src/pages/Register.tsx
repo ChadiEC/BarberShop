@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../api/axiosInstance";
 import "../css/Register.css";
+import toast from "react-hot-toast";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -19,10 +20,10 @@ export default function Register() {
     e.preventDefault();
     try {
       await api.post("/auth/register", form);
-      alert("Account created!");
+      toast.success("Account created!");
       window.location.href = "/login";
     } catch {
-      alert("Error creating account");
+      toast.error("Error creating account");
     }
   }
 
