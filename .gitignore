@@ -1,0 +1,16 @@
+# Global ignores
+node_modules/
+.env
+.env.*
+dist/
+build/
+.DS_Store
+
+# Backend
+Backend/node_modules/
+Backend/.env
+
+# Frontend
+frontend-web/node_modules/
+frontend-web/.env
+frontend-web/dist/

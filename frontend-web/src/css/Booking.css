@@ -1,0 +1,130 @@
+.booking-container {
+  width: 100%;
+  margin: 40px auto;
+  padding: 20px;
+  color: white;
+  background-color: #444;
+}
+
+.booking-container h1{
+  text-align: center;
+}
+
+.booking-container label {
+  margin-top: 15px;
+  display: block;
+  font-weight: bold;
+  
+}
+
+.booking-container select,
+.booking-container input {
+  width: 100%;
+  padding: 10px;
+  background: #222;
+  border: 1px solid #444;
+  color: white;
+  margin-top: 5px;
+}
+
+.times-container {
+  margin-top: 25px;
+}
+
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.time-btn {
+  padding: 10px;
+  background: #333;
+  border: 1px solid #666;
+  color: white;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.time-btn:hover {
+  background: #d4a017;
+  color: black;
+}
+
+
+.booking-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  color: white;
+}
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.booking-form label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.booking-form select,
+.booking-form input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background: #222;
+  color: white;
+}
+
+.timeslots {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.slot {
+  padding: 10px;
+  border-radius: 6px;
+  background: #333;
+  border: 1px solid #777;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.slot:hover {
+  background: #555;
+}
+
+.slot.selected {
+  background: #d4a024;
+  border: 1px solid #d4a024;
+  font-weight: bold;
+}
+
+.slot.occupied {
+  background: #552222;
+  border: 1px solid #aa4444;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.book-btn {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 6px;
+  background: #d4a024;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s;
+}
+
+.book-btn:hover {
+  background: #bf8b1f;
+}

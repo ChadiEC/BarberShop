@@ -1,0 +1,93 @@
+.navbar {
+  background: #111;
+  padding: 14px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #d4a017;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 20;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+/* LOGO */
+.logo {
+  font-size: 24px;
+  font-weight: 900;
+  color: #fff;
+}
+.logo span {
+  color: #d4a017;
+}
+
+/* LINKS */
+.nav-left a {
+  color: #ccc;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.nav-left a:hover {
+  color: #fff;
+}
+
+/* RIGHT SIDE */
+.nav-right {
+  display: flex;
+  align-items: center;
+  padding-right: 50px;
+  gap: 12px;
+}
+
+/* BUTTONS */
+.btn-primary {
+  padding: 6px 14px;
+  background: #d4a017;
+  color: black;
+  font-weight: 700;
+  border-radius: 6px;
+  text-decoration: none;
+  border: none;
+}
+
+.btn-outline {
+  padding: 6px 14px;
+  border: 2px solid #d4a017;
+  color: #d4a017;
+  font-weight: 700;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+/* USER SECTION */
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user {
+  font-weight: 700;
+  color: #fff;
+}
+
+.btn-logout {
+  padding: 6px 12px;
+  background: #b12f2f;
+  border: 1px solid #ff6961;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btn-logout:hover {
+  background: #ff6961;
+}

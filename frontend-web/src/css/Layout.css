@@ -1,0 +1,13 @@
+.layout-container {
+  width: 100%;
+  min-height: 100vh;
+  background: #1e1e1e;
+}
+
+.content {
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 120px 40px 60px;
+  box-sizing: border-box;
+}
