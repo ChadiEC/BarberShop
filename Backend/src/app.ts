@@ -6,6 +6,8 @@ import userRoutes from "./routes/userRoutes"
 import scheduleRoutes from "./routes/scheduleRoutes"
 import barberRoutes from "./routes/barberRoutes";
 import reservationRoutes from "./routes/reservationRoutes"
+import ratingRoutes from "./routes/ratingRoutes"
+
 const app = express();
 
 app.use(cors());
@@ -17,5 +19,6 @@ app.use("/api/users",userRoutes)
 app.use("/api/reservations", reservationRoutes)
 app.use("/api/schedule",scheduleRoutes)
 app.use("/api/barbers", barberRoutes);
+app.use("/api/rating", ratingRoutes);
 
 export default app;

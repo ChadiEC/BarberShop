@@ -1,8 +1,8 @@
 import { Router } from "express";
-import {getAllBarbersController,getBarberController,createBarberController,updateBarberController,deleteBarberController} from "../controllers/barberController";
+import {getBarberController,createBarberController,updateBarberController,deleteBarberController} from "../controllers/barberController";
 import { authMiddleware } from "../middlewares/authMiddleware";
-import { requireSelf } from "../middlewares/requireSelf";
 import { requireAdmin } from "../middlewares/requireAdmin";
+import {getAllBarbersController} from "../controllers/ratingController"
 
 const router = Router();
 

@@ -11,6 +11,7 @@ import BarberProfile from "../pages/BarberProfile";
 import BarberDashboard from "../pages/BarberDashboard";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
+import AdminReviews from "../pages/AdminReviews";
 
 export default function AppRouter() {
   return (
@@ -89,6 +90,7 @@ export default function AppRouter() {
 
       <Route path="/barbers/:username" element={<BarberProfile />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/admin/reviews" element={<AdminReviews />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
     </Routes>
   );

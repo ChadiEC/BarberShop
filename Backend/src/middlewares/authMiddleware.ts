@@ -1,14 +1,15 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { AuthRequest,AuthUserPayload } from "../types/types";
 
-export function authMiddleware(req: Request & { user?: any }, res: Response, next: NextFunction) {
+export function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
   const header = req.headers.authorization || "";
-
   const token = header.startsWith("Bearer ") ? header.slice(7) : "";
+
   if (!token) return res.status(401).json({ message: "Missing token" });
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET!);
+    const payload = jwt.verify(token, process.env.JWT_SECRET!) as AuthUserPayload;
     req.user = payload;
     next();
   } catch {

@@ -1,0 +1,72 @@
+.admin-reviews {
+  max-width: 900px;
+  margin: 100px auto;
+  padding: 20px;
+}
+
+.admin-reviews h1 {
+  margin-bottom: 30px;
+}
+
+/* Barber accordion */
+.barber-group {
+  margin-bottom: 20px;
+}
+
+.barber-toggle {
+  width: 100%;
+  padding: 14px;
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.barber-toggle:hover {
+  background: #262626;
+}
+
+/* Reviews */
+.reviews-list {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.review-card {
+  background: #181818;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #333;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.comment {
+  margin: 10px 0;
+  color: #ddd;
+}
+
+.delete-btn {
+  margin-top: 10px;
+  margin-left: 10px;
+  padding: 8px 12px;
+  background: #b00020;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: #d00028;
+}

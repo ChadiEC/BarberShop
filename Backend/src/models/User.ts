@@ -23,7 +23,6 @@ const UserSchema = new Schema<IUserModel>({
         required: true, 
         unique: true, 
         trim: true,
-    
     },
 
     password: { type: String, required: true },
@@ -36,7 +35,7 @@ const UserSchema = new Schema<IUserModel>({
         default: "client" 
     },
 
-    phoneNumber: { type: String},
+    phoneNumber: { type: String },
 
     bio: { type: String, default: "" },
 
@@ -51,5 +50,19 @@ const UserSchema = new Schema<IUserModel>({
     resetPasswordExpires: { type: Date },
 
 }, { timestamps: true });
+
+
+UserSchema.set("toJSON", { virtuals: true });
+UserSchema.set("toObject", { virtuals: true });
+
+// VIRTUAL: AVG RATING (list of ratings, not computed)
+
+UserSchema.virtual("avgRating", {
+  ref: "Rating",
+  localField: "username",
+  foreignField: "barberUsername",
+  justOne: false,
+});
+
 
 export default model<IUserModel>("User", UserSchema);

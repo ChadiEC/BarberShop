@@ -29,7 +29,6 @@ export default function Navbar() {
     navigate("/login");
     toast.success("Logged out");
   }
- 
 
   // Load barbers only for admin
   useEffect(() => {
@@ -41,10 +40,16 @@ export default function Navbar() {
   // Close admin dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
-      if (dashboardRef.current && !dashboardRef.current.contains(e.target as Node)) {
+      if (
+        dashboardRef.current &&
+        !dashboardRef.current.contains(e.target as Node)
+      ) {
         setOpenDashboard(false);
       }
-      if (settingsRef.current && !settingsRef.current.contains(e.target as Node)) {
+      if (
+        settingsRef.current &&
+        !settingsRef.current.contains(e.target as Node)
+      ) {
         setShowSettings(false);
       }
     }
@@ -52,7 +57,6 @@ export default function Navbar() {
     return () => document.removeEventListener("mouseup", handleClickOutside);
   }, []);
 
-  
   async function changePassword() {
     if (!currentPassword || !newPassword) {
       return toast.error("All fields are required.");
@@ -74,8 +78,8 @@ export default function Navbar() {
     }
   }
   useEffect(() => {
-  setShowSettings(false);
-}, [token]);
+    setShowSettings(false);
+  }, [token]);
 
   return (
     <>
@@ -96,14 +100,17 @@ export default function Navbar() {
 
           {/* BARBER DASHBOARD */}
           {token && user.role === "barber" && (
-            <Link 
-              to={`/dashboard/barber/${user.username}`} 
+            <Link
+              to={`/dashboard/barber/${user.username}`}
               className="dash-link"
             >
               My Dashboard
             </Link>
           )}
 
+          {token && user.role === "admin" && (
+            <Link to="/admin/reviews">Moderate Reviews</Link>
+          )}
           {/* ADMIN DASHBOARD DROPDOWN */}
           {token && user.role === "admin" && (
             <div className="dropdown" ref={dashboardRef}>
@@ -140,8 +147,12 @@ export default function Navbar() {
         <div className="nav-right">
           {!token ? (
             <>
-              <Link to="/register" className="btn-outline">Register</Link>
-              <Link to="/login" className="btn-primary">Login</Link>
+              <Link to="/register" className="btn-outline">
+                Register
+              </Link>
+              <Link to="/login" className="btn-primary">
+                Login
+              </Link>
             </>
           ) : (
             <div className="user-menu" ref={settingsRef}>

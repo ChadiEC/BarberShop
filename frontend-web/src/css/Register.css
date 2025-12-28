@@ -1,24 +1,81 @@
+/* PAGE */
+.register-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+/* CARD */
+.register-card {
+  width: 420px;
+  background: #1c1c1c;
+  margin-bottom: 100px;
+  padding: 40px;
+  border-radius: 14px;
+  border: 1px solid #2f2f2f;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* TITLES */
+.register-card h1 {
+  margin-bottom: 5px;
+}
+
+.subtitle {
+  margin-bottom: 30px;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+/* FORM */
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
 }
 
-.register-form input {
-  width: 100%;
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input-group label {
+  font-size: 0.85rem;
+  color: #bbb;
+}
+
+.input-group input {
   padding: 12px;
-  background: #2c2c2c;
-  border: 1px solid #555;
-  border-radius: 6px;
+  background: #262626;
+  border: 1px solid #444;
+  border-radius: 8px;
   color: white;
+  outline: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
-.register-form button {
-  padding: 12px;
-  background: #d4af37;
+.input-group input:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+/* BUTTON */
+.register-btn {
+  margin-top: 10px;
+  padding: 14px;
+  background: linear-gradient(135deg, #d4af37, #b8962e);
+  border: none;
+  border-radius: 8px;
   color: black;
   font-weight: bold;
-  border: none;
-  border-radius: 6px;
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
 }

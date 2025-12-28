@@ -1,6 +1,6 @@
 .barber-profile {
   width: 1900px;
-  margin: 20 auto;
+  margin: 20px auto;
   padding-top: 100px;
   padding-left: 100px;
   padding-bottom: 500px;
@@ -66,4 +66,91 @@
 .unavailable {
   color: red;
   margin-top: 10px;
+}
+.reviews-section {
+  margin: 50px 0;
+  max-width: 800px;
+}
+
+.no-reviews {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.review-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 15px;
+  margin-bottom: 15px;
+  transition: transform 0.2s ease;
+}
+
+.review-card:hover {
+  transform: translateY(-2px);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.review-stars {
+  color: gold;
+  font-size: 18px;
+  letter-spacing: 1px;
+}
+
+.review-date {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.comment {
+  margin: 8px 0;
+  color: #ddd;
+  line-height: 1.4;
+}
+
+.client {
+  font-size: 13px;
+  opacity: 0.7;
+  text-align: right;
+}
+.rating-form {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.rating-form select,
+.rating-form textarea {
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.rating-form button {
+  background: gold;
+  border: none;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.service-btn{
+  width: 10%;
+  padding: 10px;
+  border: none;
+  background: #d4a017;
+  color: black;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
 }

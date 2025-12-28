@@ -50,6 +50,14 @@ export default function Booking() {
   }, []);
 
   useEffect(() => {
+    const preselectedBarber = location.state?.preselectedBarber;
+
+    if (preselectedBarber && selectedBarber === "") {
+      setSelectedBarber(preselectedBarber);
+    }
+  }, [location.state, selectedBarber]);
+
+  useEffect(() => {
     if (!selectedBarber || !date) return;
 
     async function loadOccupiedSlots() {
@@ -99,12 +107,12 @@ export default function Booking() {
     "17:30",
   ];
   useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    toast.error("Please login to book an appointment.");
-    navigate("/login");
-  }
-}, []);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Please login to book an appointment.");
+      navigate("/login");
+    }
+  }, []);
 
   // ---------------------------
   // HANDLE BOOKING SUBMIT
@@ -116,7 +124,6 @@ export default function Booking() {
       toast.error("Please fill all fields");
       return;
     }
-    
 
     // Date format expected: YYYY-MM-DDTHH:mm
     const DateYMD = `${date}`;

@@ -1,7 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../api/axiosInstance";
+import RatingForm from "../componants/RatingForm";
 import "../css/BarberProfile.css";
+import toast from "react-hot-toast";
 
 interface Barber {
   username: string;
@@ -10,6 +12,16 @@ interface Barber {
   bio?: string;
   specialties?: string[];
   experience?: number;
+  avgRating?: number;
+  ratingCount?: number;
+}
+
+interface Rating {
+  _id: string;
+  clientUsername: string;
+  stars: number;
+  comment?: string;
+  createdAt: string;
 }
 
 interface ScheduleSlot {
@@ -22,39 +34,82 @@ export default function BarberProfile() {
   const { username } = useParams();
   const navigate = useNavigate();
 
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+
   const [barber, setBarber] = useState<Barber | null>(null);
   const [schedule, setSchedule] = useState<ScheduleSlot[]>([]);
+  const [reviews, setReviews] = useState<Rating[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const loadBarber = async () => {
-    if (!username) return;
-    const res = await api.get(`/barbers/${username}`);
-    setBarber(res.data);
-  };
-
-  const loadSchedule = async () => {
-    if (!username) return;
-    const res = await api.get(`/schedule/${username}`);
-    setSchedule(res.data);
-  };
-
+  // Load barber
   useEffect(() => {
-    
+    async function loadBarber() {
+      if (!username) return;
+      const res = await api.get(`/barbers/${username}`);
+      setBarber(res.data);
+    }
+
+    async function loadSchedule() {
+      if (!username) return;
+      const res = await api.get(`/schedule/${username}`);
+      setSchedule(res.data);
+    }
+
     loadBarber();
     loadSchedule();
   }, [username]);
 
-  function book(day: string, time: string) {
-    navigate(`/booking?barber=${username}&day=${day}&time=${time}`);
+  // Load ratings
+  useEffect(() => {
+    async function loadRatings() {
+      try {
+        const res = await api.get(`/rating/${username}`);
+        setReviews(Array.isArray(res.data) ? res.data : []);
+      } catch (err) {
+        console.error("Error loading ratings", err);
+        setReviews([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (username) loadRatings();
+  }, [username]);
+
+  // Logic
+  const alreadyRated =
+    token &&
+    user?.role === "client" &&
+    reviews.some((r) => r.clientUsername === user.username);
+
+  function handleBook(barberUsername: string) {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      toast.error("Log in or register to book now!");
+      navigate("/login");
+      return;
+    }
+
+    navigate("/booking", {
+      state: {
+        preselectedBarber: barberUsername,
+      },
+    });
   }
 
   if (!barber) return <div className="loading">Loading...</div>;
 
   return (
     <div className="barber-profile">
-      {/* --- SECTION PHOTO + INFOS --- */}
+      {/* ===== HEADER ===== */}
       <div className="profile-header">
         <img
-          src={barber.photoUrl || "https://lagarebarbier.ca/cdn/shop/files/IR4A6572.jpg?v=1736263971&width=1500"}
+          src={
+            barber.photoUrl ||
+            "https://lagarebarbier.ca/cdn/shop/files/IR4A6572.jpg"
+          }
           alt={barber.fullname}
           className="barber-photo"
         />
@@ -62,6 +117,13 @@ export default function BarberProfile() {
         <div>
           <h1>{barber.fullname}</h1>
           <p className="username">@{barber.username}</p>
+
+          {barber.avgRating !== undefined && (
+            <p className="rating-summary">
+              ⭐ {barber.avgRating} ({barber.ratingCount} reviews)
+            </p>
+          )}
+
           {barber.bio && <p className="bio">{barber.bio}</p>}
           {barber.experience && <p>{barber.experience} years experience</p>}
 
@@ -78,30 +140,49 @@ export default function BarberProfile() {
         </div>
       </div>
 
-      {/* --- SECTION SCHEDULE --- */}
-      <h2>Available Slots</h2>
+      {/* ===== RATING FORM ===== */}
+      {token && user.role === "client" && !alreadyRated && (
+        <RatingForm barberUsername={username!} />
+      )}
 
-      <div className="schedule-grid">
-        {schedule.length === 0 && <p>No available slots.</p>}
+      {token && user.role === "client" && alreadyRated && (
+        <p className="already-rated">You already rated this barber ⭐</p>
+      )}
 
-        {schedule.map((slot, index) => (
-          <div className="slot-card" key={index}>
-            <p className="slot-day">{slot.day}</p>
-            <p className="slot-time">{slot.time}</p>
+      {/* ===== REVIEWS ===== */}
+      <div className="reviews-section">
+        <h2>⭐ Reviews</h2>
 
-            {slot.available ? (
-              <button
-                className="btn-book"
-                onClick={() => book(slot.day, slot.time)}
-              >
-                Book
-              </button>
-            ) : (
-              <p className="unavailable">Unavailable</p>
-            )}
+        {!loading && reviews.length === 0 && (
+          <p className="no-reviews">No reviews yet.</p>
+        )}
+
+        {reviews.map((r) => (
+          <div key={r._id} className="review-card">
+            <div className="review-header">
+              <span className="review-stars">
+                {"★".repeat(r.stars)}
+                {"☆".repeat(5 - r.stars)}
+              </span>
+              <span className="review-date">
+                {new Date(r.createdAt).toLocaleDateString()}
+              </span>
+            </div>
+
+            {r.comment && <p className="comment">{r.comment}</p>}
+            <p className="client">— {r.clientUsername}</p>
           </div>
         ))}
       </div>
+
+      
+      {/* ===== BOOK NOW ===== */}
+      <button
+        className="service-btn"
+        onClick={() => handleBook(barber.username)}
+      >
+        Book Now
+      </button>
     </div>
   );
 }
